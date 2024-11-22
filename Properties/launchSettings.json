@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MornyMorse": {
+      "commandName": "Project",
+      "commandLineArgs": "--autoStart\r\n"
+    }
+  }
+}
