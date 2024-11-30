@@ -29,6 +29,12 @@ public class ADSRSineWaveProvider : ISampleProvider
         waveFormat = WaveFormat.CreateIeeeFloatWaveFormat((int)sampleRate, 1);
     }
 
+    public void EnterRelease()
+    {
+        // Immediately enter the decay phase
+        sample = (int)((duration + attackTime - releaseTime) * sampleRate);
+    }
+
     public WaveFormat WaveFormat => waveFormat;
 
     public int Read(float[] buffer, int offset, int count)

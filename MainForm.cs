@@ -80,6 +80,35 @@ public partial class MainForm : Form
 
         playerTask.MessageSent += (msg) => Invoke(() => HandlePlayerMessage(msg));
         playerTask.Start();
+
+        AttachMouseEvents(this);
+    }
+    private void AttachMouseEvents(Control control)
+    {
+        control.MouseDown += OnMouseDownAnywhere;
+        control.MouseUp += OnMouseUpAnywhere;
+
+        // Recursively attach to all child controls.
+        foreach (Control childControl in control.Controls)
+        {
+            AttachMouseEvents(childControl);
+        }
+    }
+
+    private void OnMouseDownAnywhere(object? sender, MouseEventArgs e)
+    {
+        if (e.Button == MouseButtons.Right)
+        {
+            playerTask.QueuePlayerRequest(PlayerRequestType.SendTone);
+        }
+    }
+
+    private void OnMouseUpAnywhere(object? sender, MouseEventArgs e)
+    {
+        if (e.Button == MouseButtons.Right)
+        {
+            playerTask.QueuePlayerRequest(PlayerRequestType.StopTone);
+        }
     }
 
     private void UpdateTestSet()
@@ -177,10 +206,11 @@ public partial class MainForm : Form
         double maxAvgTime = sortedStrings.First().Value.GetAverage();
         if (maxAvgTime == 0) maxAvgTime = 10;
 
+        const int balance = 3;
         var weightedChars = sortedStrings.Select(stringData =>
         {
             var av = stringData.Value.GetAverage();
-            double weight = av <= 0.0 || maxAvgTime == 0.0 ? 10.0 : (Math.Pow(av, 4) / Math.Pow(maxAvgTime, 4)) * 100;
+            double weight = av <= 0.0 || maxAvgTime == 0.0 ? 10.0 : (Math.Pow(av, balance) / Math.Pow(maxAvgTime, balance)) * 100;
             return (stringData.Key, weight);
         }).ToList();
 
@@ -293,6 +323,7 @@ public partial class MainForm : Form
 
     private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)
     {
+        playerTask.QueuePlayerRequest(PlayerRequestType.StopTone);
         playerTask.Dispose();
         Save();
     }
@@ -327,7 +358,7 @@ public partial class MainForm : Form
     private void UpdateTotals()
     {
         // Average of all averages
-        double averageOfAllAverages = GetCurrentTimes().Values.Average(ra => ra.Average);   
+        double averageOfAllAverages = GetCurrentTimes().Values.Average(ra => ra.Average);
         double totalOfAllValues = GetCurrentTimes().Values.Sum(ra => ra.Average);
         this.averageValue.Text = $"Total: {totalOfAllValues:F1}\nAvg: {averageOfAllAverages:F1}";
 

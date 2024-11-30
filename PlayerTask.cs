@@ -17,7 +17,9 @@ public enum PlayerRequestType
 {
     Play,
     Buzz,
-    Save
+    Save,
+    SendTone,
+    StopTone,
 }
 
 public readonly record struct StringFinishTime(string s, double time);
@@ -33,6 +35,8 @@ public class PlayerTask
     private WaveFileWriter? _waveFileWriter = null;
     private Task? _task = null;
     public event Action<MessageFromPlayer>? MessageSent;
+    private WaveOutEvent? _sendTone = null;
+    private ADSRSineWaveProvider? _sentToneADSR = null;
 
     public void QueuePlayerRequest(PlayerRequestType type, string message = "", bool queueIt = false)
     {
@@ -113,6 +117,38 @@ public class PlayerTask
                     {
                         totalDuration = 0.0f;
                         currentProvider = null;
+
+                        if (message.type == PlayerRequestType.SendTone)
+                        {
+                            if (_sendTone != null || _sentToneADSR != null)
+                            {
+                                continue;
+                            }
+                                
+                            _sendTone = new WaveOutEvent { DeviceNumber = 0 };
+                            
+                            double attackReleaseTime = ditDuration * 0.0010;
+                            _sentToneADSR = new ADSRSineWaveProvider(
+                                frequency: 600,
+                                sampleRate: sampleRate,
+                                duration: (float)1000.0,
+                                attackTime: (float)attackReleaseTime,
+                                decayTime: 0.0f,
+                                sustainLevel: 1.0f,
+                                releaseTime: (float)attackReleaseTime);
+
+                            _sendTone.Init(_sentToneADSR as ISampleProvider);
+                            _sendTone.Play();
+                            continue;
+                        }
+                        else if (message.type == PlayerRequestType.StopTone)
+                        {
+                            _sentToneADSR?.EnterRelease();
+
+                            _sendTone = null;
+                            _sentToneADSR = null;
+                            continue;
+                        }
 
                         var wo = new WaveOutEvent { DeviceNumber = 0 };
                         wo.PlaybackStopped += (sender, e) =>
