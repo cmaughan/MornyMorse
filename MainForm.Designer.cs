@@ -87,6 +87,7 @@
             // 
             // averageValue
             // 
+            averageValue.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             averageValue.AutoSize = true;
             averageValue.Location = new Point(1136, 373);
             averageValue.Name = "averageValue";

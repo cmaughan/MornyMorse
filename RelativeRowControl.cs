@@ -48,13 +48,16 @@ public class RelativeValueRowControl : Control
         barHeight = (int)sz.Height;
         int gap = 2;
 
+        float ratio = (this.Width * 2) / this.Height;
+        int cols = (int)(Math.Min(Math.Max(ratio, 1), 5));
+        cols = 2;
         // Divide into two columns
-        int columnWidth = (this.Width - (gap * 3)) / 2;
+        int columnWidth = (this.Width - (gap * 3)) / cols;
         int baseWidth = columnWidth - inStep - gap;
 
         // Calculate the total number of rows (half the items, rounded up)
         int totalItems = stringTimes.Count;
-        int rows = (totalItems + 1) / 2;
+        int rows = (totalItems + 1) / cols;
 
         int i = 0;
 

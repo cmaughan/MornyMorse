@@ -284,7 +284,8 @@ public partial class MainForm : Form
 
         if (pending.Length > currentInput.Length) return;
 
-        double time = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+        double time = playerTask.CurrentTime;
+
         bool skipWait = true;
         if (skipWait && (time >= pendingTime))
         {

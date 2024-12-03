@@ -37,14 +37,19 @@ public class PlayerTask
     public event Action<MessageFromPlayer>? MessageSent;
     private WaveOutEvent? _sendTone = null;
     private ADSRSineWaveProvider? _sentToneADSR = null;
+    private Stopwatch _stopwatch = new();
+    private double _startTime = 0.0;
 
     public void QueuePlayerRequest(PlayerRequestType type, string message = "", bool queueIt = false)
     {
         _playerMessageQueue.Enqueue(new PlayerRequest(type, message, queueIt));
     }
 
+    public double StartTime => _startTime;
+    public double CurrentTime => _stopwatch.Elapsed.TotalSeconds;
     public void Start()
     {
+
         if (_task != null)
         {
             return;
@@ -59,6 +64,8 @@ public class PlayerTask
                 const double ditDuration = 1.2f / wpm;
                 double totalDuration = 0.0;
                 int sampleRate = 44100;
+
+                Debug.WriteLine($"Dit duration: {ditDuration}");
 
                 void AddSpace(int ditLength)
                 {
@@ -105,12 +112,15 @@ public class PlayerTask
                     finishedTimes.Add(new StringFinishTime
                     {
                         s = s,
-                        time = totalDuration + (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds
+                        time = totalDuration + _stopwatch.Elapsed.TotalSeconds + 0.1
                     });
                 }
 
                 while (!_cts.Token.IsCancellationRequested)
                 {
+                    _stopwatch.Start();
+                    _startTime = _stopwatch.Elapsed.TotalSeconds;
+
                     finishedTimes.Clear();
 
                     if (_playerMessageQueue.TryDequeue(out PlayerRequest message))
@@ -126,7 +136,8 @@ public class PlayerTask
                             }
                                 
                             _sendTone = new WaveOutEvent { DeviceNumber = 0 };
-                            
+                            _sendTone.DesiredLatency = 100;
+
                             double attackReleaseTime = ditDuration * 0.0010;
                             _sentToneADSR = new ADSRSineWaveProvider(
                                 frequency: 600,
@@ -151,6 +162,7 @@ public class PlayerTask
                         }
 
                         var wo = new WaveOutEvent { DeviceNumber = 0 };
+                        wo.DesiredLatency = 100;
                         wo.PlaybackStopped += (sender, e) =>
                         {
                             MessageSent?.Invoke(new MessageFromPlayer { type = PlayerMessageType.PlayStopped });

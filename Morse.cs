@@ -2,7 +2,7 @@
 
 public class Morse
 {
-    public static readonly List<string> Bigrams = ["TH", "HE", "IN", "EN", "NT", "RE", "ER", "AN", "TI", "ES", "ON", "AT", "SE", "ND", "OR", "AR", "AL", "TE", "CO", "DE", "TO", "RA", "ET", "ED", "IT", "SA", "EM", "RO", "IF"];
+    public static readonly List<string> Bigrams = ["AB", "AC", "AD", "AE", "AF", "AG", "AL", "AM", "AN", "AR", "AS", "AT", "AU", "AV", "AW", "AY", "BA", "BE", "BI", "BL", "BO", "BR", "BU", "CA", "CE", "CH", "CI", "CL", "CO", "CR", "CU", "DA", "DE", "DI", "DO", "DR", "DU", "EA", "ED", "EE", "EF", "EI", "EL", "EM", "EN", "ER", "ES", "ET", "EV", "EW", "EX", "FA", "FE", "FI", "FL", "FO", "FR", "FU", "GA", "GE", "GI", "GL", "GO", "GR", "GU", "HA", "HE", "HI", "HO", "HU", "HY", "IA", "IE", "IG", "IL", "IM", "IN", "IO", "IR", "IS", "IT", "IV", "JA", "JE", "JO", "JU", "KA", "KE", "KI", "KN", "LA", "LE", "LI", "LO", "LU", "MA", "ME", "MI", "MO", "MU", "NA", "NE", "NI", "NO", "NU", "NY", "OA", "OB", "OC", "OD", "OE", "OF", "OG", "OI", "OL", "OM", "ON", "OO", "OP", "OR", "OS", "OT", "OU", "OW", "OX", "PA", "PE", "PI", "PL", "PO", "PR", "PU", "QU", "RA", "RE", "RI", "RO", "RU", "SA", "SC", "SE", "SH", "SI", "SL", "SO", "SP", "ST", "SU", "TA", "TE", "TH", "TI", "TO", "TR", "TU", "TW", "UA", "UE", "UL", "UM", "UN", "UP", "UR", "US", "UT", "VA", "VE", "VI", "VO", "WA", "WE", "WH", "WI", "WO", "WR", "XA", "XE", "XI", "YA", "YE", "YO", "ZA", "ZE"];
     public static readonly List<string> Trigrams = ["THE", "AND", "THA", "ENT", "ING", "ION", "TIO", "FOR", "NDE", "HAS", "NCE", "EDT", "TIS", "OFT", "STH", "MEN", "ONE"];
     public static readonly List<string> ProSigns = [
     "|AC",
