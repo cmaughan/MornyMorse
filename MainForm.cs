@@ -8,6 +8,30 @@ using System.Text.Json;
 
 namespace MornyMorse;
 
+public static class Extensions
+{
+    public static double StdDev<T>(this IEnumerable<T> list, Func<T, double> values)
+    {
+        // ref: https://stackoverflow.com/questions/2253874/linq-equivalent-for-standard-deviation
+        // ref: http://warrenseen.com/blog/2006/03/13/how-to-calculate-standard-deviation/ 
+        var mean = 0.0;
+        var sum = 0.0;
+        var stdDev = 0.0;
+        var n = 0;
+        foreach (var value in list.Select(values))
+        {
+            n++;
+            var delta = value - mean;
+            mean += delta / n;
+            sum += delta * (value - mean);
+        }
+        if (1 < n)
+            stdDev = Math.Sqrt(sum / (n - 1));
+
+        return stdDev;
+
+    }
+}
 public partial class MainForm : Form
 {
     private readonly List<string> testSet = Morse.Letters.ToList();
@@ -355,13 +379,16 @@ public partial class MainForm : Form
             SaveChecks(filePath, checkboxItems);
         }
     }
-
     private void UpdateTotals()
     {
         // Average of all averages
         double averageOfAllAverages = GetCurrentTimes().Values.Average(ra => ra.Average);
+        double averageOfAllSquaredAverages = GetCurrentTimes().Values.Average(ra => ra.Average * ra.Average);
         double totalOfAllValues = GetCurrentTimes().Values.Sum(ra => ra.Average);
-        this.averageValue.Text = $"Total: {totalOfAllValues:F1}\nAvg: {averageOfAllAverages:F1}";
+        var dev = GetCurrentTimes().Values.Select(ra => ra.Average).StdDev(x => x);
+        var variation = (dev / averageOfAllAverages) * 100.0;
+
+        this.averageValue.Text = $"Total: {totalOfAllValues:F1}\nAvg: {averageOfAllAverages:F1}\nVariation: {variation:F1}%";
 
     }
     private void Reset(bool clearTimings)
