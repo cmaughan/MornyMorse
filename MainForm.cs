@@ -306,13 +306,22 @@ public partial class MainForm : Form
             pending = pending.Trim('|');
         }
 
-        if (pending.Length > currentInput.Length) return;
-
         double time = playerTask.CurrentTime;
 
         bool skipWait = true;
         if (skipWait && (time >= pendingTime))
         {
+            if (pending.Length > currentInput.Length)
+            {
+                if (currentInput != pending.Substring(0, currentInput.Length))
+                {
+                    allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() + 1.0);
+                    allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() + 1.0);
+                    playerTask.QueuePlayerRequest(PlayerRequestType.Buzz);
+                }
+                return;
+            }
+
             if (currentInput == pending)
             {
                 double t = time - pendingTime;

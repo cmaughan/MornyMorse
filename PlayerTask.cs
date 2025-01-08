@@ -60,7 +60,7 @@ public class PlayerTask
             _task = Task.Run(() =>
             {
                 ISampleProvider? currentProvider = null;
-                const float wpm = 20.0f;
+                const float wpm = 12.0f;
                 const double ditDuration = 1.2f / wpm;
                 double totalDuration = 0.0;
                 int sampleRate = 44100;
