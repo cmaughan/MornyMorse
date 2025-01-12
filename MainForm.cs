@@ -7,31 +7,6 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 
 namespace MornyMorse;
-
-public static class Extensions
-{
-    public static double StdDev<T>(this IEnumerable<T> list, Func<T, double> values)
-    {
-        // ref: https://stackoverflow.com/questions/2253874/linq-equivalent-for-standard-deviation
-        // ref: http://warrenseen.com/blog/2006/03/13/how-to-calculate-standard-deviation/ 
-        var mean = 0.0;
-        var sum = 0.0;
-        var stdDev = 0.0;
-        var n = 0;
-        foreach (var value in list.Select(values))
-        {
-            n++;
-            var delta = value - mean;
-            mean += delta / n;
-            sum += delta * (value - mean);
-        }
-        if (1 < n)
-            stdDev = Math.Sqrt(sum / (n - 1));
-
-        return stdDev;
-
-    }
-}
 public partial class MainForm : Form
 {
     private readonly List<string> testSet = Morse.Letters.ToList();
@@ -67,9 +42,16 @@ public partial class MainForm : Form
 
     public MainForm()
     {
+        if (Properties.Settings.Default.IsMaximized)
+        {
+            this.WindowState = FormWindowState.Maximized;
+        }
+
         InitializeComponent();
+
         loading = true;
 
+        Shown += MainForm_Shown;
         Load += MainForm_Load;
         FormClosing += MainForm_FormClosing;
         StartPosition = FormStartPosition.CenterScreen;
@@ -107,6 +89,21 @@ public partial class MainForm : Form
 
         AttachMouseEvents(this);
     }
+
+    private void MainForm_Shown(object? sender, EventArgs e)
+    {
+
+        string[] args = Environment.GetCommandLineArgs();
+        if (args.Length > 1 && args[1] == "--autoStart")
+        {
+            start_Click(this, EventArgs.Empty);
+        }
+        else
+        {
+            Reset(false);
+        }
+    }
+
     private void AttachMouseEvents(Control control)
     {
         control.MouseDown += OnMouseDownAnywhere;
@@ -191,13 +188,6 @@ public partial class MainForm : Form
         }
 
         UpdateTestSet();
-        Reset(false);
-
-        string[] args = Environment.GetCommandLineArgs();
-        if (args.Length > 1 && args[1] == "--autoStart")
-        {
-            start_Click(this, EventArgs.Empty);
-        }
 
         loading = false;
     }
@@ -318,6 +308,7 @@ public partial class MainForm : Form
                     allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() + 1.0);
                     allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() + 1.0);
                     playerTask.QueuePlayerRequest(PlayerRequestType.Buzz);
+                    currentInput = String.Empty;
                 }
                 return;
             }
@@ -357,6 +348,9 @@ public partial class MainForm : Form
 
     private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)
     {
+        Properties.Settings.Default.IsMaximized = (this.WindowState == FormWindowState.Maximized);
+        Properties.Settings.Default.Save();
+
         playerTask.QueuePlayerRequest(PlayerRequestType.StopTone);
         playerTask.Dispose();
         Save();
@@ -391,6 +385,8 @@ public partial class MainForm : Form
     private void UpdateTotals()
     {
         // Average of all averages
+        if (GetCurrentTimes().Count == 0) return;
+
         double averageOfAllAverages = GetCurrentTimes().Values.Average(ra => ra.Average);
         double averageOfAllSquaredAverages = GetCurrentTimes().Values.Average(ra => ra.Average * ra.Average);
         double totalOfAllValues = GetCurrentTimes().Values.Sum(ra => ra.Average);

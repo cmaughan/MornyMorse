@@ -35,6 +35,11 @@ public class RelativeValueRowControl : Control
 
         Graphics g = e.Graphics;
 
+        if (stringTimes.Count == 0)
+        {
+            return;
+        }
+
         maxValue = 0.0;
         foreach (var (s, value) in stringTimes)
         {
@@ -48,9 +53,10 @@ public class RelativeValueRowControl : Control
         barHeight = (int)sz.Height;
         int gap = 2;
 
-        float ratio = (this.Width * 2) / this.Height;
-        int cols = (int)(Math.Min(Math.Max(ratio, 1), 5));
-        cols = 2;
+        float numInY = Height / (float)(barHeight + (gap * 2));
+        int cols = (int)Math.Max((Math.Ceiling(stringTimes.Count / numInY)), 1);
+
+        //cols = 2;
         // Divide into two columns
         int columnWidth = (this.Width - (gap * 3)) / cols;
         int baseWidth = columnWidth - inStep - gap;

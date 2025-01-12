@@ -47,7 +47,7 @@
             // replayButton
             // 
             replayButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            replayButton.Location = new Point(1136, 67);
+            replayButton.Location = new Point(1821, 67);
             replayButton.Name = "replayButton";
             replayButton.Size = new Size(173, 40);
             replayButton.TabIndex = 2;
@@ -60,13 +60,13 @@
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel1.Location = new Point(12, 21);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1095, 1085);
+            panel1.Size = new Size(1780, 1085);
             panel1.TabIndex = 3;
             // 
             // startButton
             // 
             startButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            startButton.Location = new Point(1136, 21);
+            startButton.Location = new Point(1821, 21);
             startButton.Name = "startButton";
             startButton.Size = new Size(173, 40);
             startButton.TabIndex = 4;
@@ -80,7 +80,7 @@
             testSetChecks.CheckOnClick = true;
             testSetChecks.FormattingEnabled = true;
             testSetChecks.Items.AddRange(new object[] { "Letters", "Numbers", "ProSigns", "Bigrams", "Trigrams", "Words" });
-            testSetChecks.Location = new Point(1136, 127);
+            testSetChecks.Location = new Point(1821, 127);
             testSetChecks.Name = "testSetChecks";
             testSetChecks.Size = new Size(173, 228);
             testSetChecks.TabIndex = 5;
@@ -89,7 +89,7 @@
             // 
             averageValue.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             averageValue.AutoSize = true;
-            averageValue.Location = new Point(1136, 373);
+            averageValue.Location = new Point(1821, 373);
             averageValue.Name = "averageValue";
             averageValue.Size = new Size(24, 30);
             averageValue.TabIndex = 7;
@@ -99,7 +99,7 @@
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1333, 1118);
+            ClientSize = new Size(2018, 1118);
             Controls.Add(averageValue);
             Controls.Add(testSetChecks);
             Controls.Add(startButton);
