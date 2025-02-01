@@ -176,6 +176,13 @@ public partial class MainForm : Form
 
         allStringTimes = LoadTimings(filePath) ?? new Dictionary<string, RollingAverage>();
 
+        /*
+        foreach (var t in allStringTimes)
+        {
+            allStringTimes[t.Key] = new RollingAverage(5);
+        }
+        */
+
         var items = LoadChecks(Utils.GetDropBoxPath("check_bindings.json")) ?? new BindingList<CheckboxItem>();
         if (items.Count != 0)
         {
@@ -220,7 +227,7 @@ public partial class MainForm : Form
         double maxAvgTime = sortedStrings.First().Value.GetAverage();
         if (maxAvgTime == 0) maxAvgTime = 10;
 
-        const int balance = 3;
+        const int balance = 2;
         var weightedChars = sortedStrings.Select(stringData =>
         {
             var av = stringData.Value.GetAverage();
@@ -315,7 +322,7 @@ public partial class MainForm : Form
 
             if (currentInput == pending)
             {
-                double t = time - pendingTime;
+                double t = time - pendingTime - PlayerTask.ditDuration;
                 allStringTimes[pendingFull].AddValue(t);
 
                 Debug.WriteLine($"Char: {code}, Time: {t:F1}, Av: {allStringTimes[pendingFull].GetAverage():F1}");

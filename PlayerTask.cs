@@ -30,6 +30,8 @@ public readonly record struct PlayerRequest(PlayerRequestType type, string text,
 
 public class PlayerTask
 {
+    public const float wpm = 30.0f;
+    public const double ditDuration = 1.2f / wpm;
     private readonly ConcurrentQueue<PlayerRequest> _playerMessageQueue = new();
     private readonly CancellationTokenSource _cts = new();
     private WaveFileWriter? _waveFileWriter = null;
@@ -60,8 +62,6 @@ public class PlayerTask
             _task = Task.Run(() =>
             {
                 ISampleProvider? currentProvider = null;
-                const float wpm = 12.0f;
-                const double ditDuration = 1.2f / wpm;
                 double totalDuration = 0.0;
                 int sampleRate = 44100;
 
