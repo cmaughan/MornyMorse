@@ -37,7 +37,8 @@ public partial class MainForm : Form
         new CheckboxItem { Name = "ProSigns", IsChecked = false },
         new CheckboxItem { Name = "Bigrams", IsChecked = false },
         new CheckboxItem { Name = "Trigrams", IsChecked = false },
-        new CheckboxItem { Name = "Words", IsChecked = false }
+        new CheckboxItem { Name = "Words", IsChecked = false },
+        new CheckboxItem { Name = "Punctuation", IsChecked = false }
     ];
 
     public MainForm()
@@ -147,6 +148,7 @@ public partial class MainForm : Form
                     "Numbers" => Morse.Numbers,
                     "Bigrams" => Morse.Bigrams,
                     "Trigrams" => Morse.Trigrams,
+                    "Punctuation" => Morse.Punctuation,
                     _ => Enumerable.Empty<string>()
                 });
             }
@@ -184,7 +186,7 @@ public partial class MainForm : Form
         */
 
         var items = LoadChecks(Utils.GetDropBoxPath("check_bindings.json")) ?? new BindingList<CheckboxItem>();
-        if (items.Count != 0)
+        if (items.Count != 0 && items.Count == checkboxItems.Count)
         {
             checkboxItems = items;
             testSetChecks.DataSource = checkboxItems;
@@ -271,31 +273,65 @@ public partial class MainForm : Form
             return;
         }
 
+        var code = char.ToUpper((char)e.KeyCode);
         if (e.Shift)
         {
             if (e.KeyCode == Keys.A)
             {
                 AddPlayerString(pendingUserInputs.Peek().s, false);
+                currentInput = string.Empty;
+                return;
             }
             else if (e.KeyCode == Keys.S)
             {
                 playerTask.QueuePlayerRequest(PlayerRequestType.Save, pendingUserInputs.Peek().s, false);
+                currentInput = string.Empty;
+                return;
             }
-
-            currentInput = string.Empty;
-            return;
+            else if (e.KeyCode == Keys.ShiftKey)
+            {
+                currentInput = string.Empty;
+                return;
+            }
+            else if (e.KeyCode == Keys.Oem2)
+            {
+                code = '?';
+            }
+            else if (e.KeyCode == Keys.Oemplus)
+            {
+                code = '+';
+            }
         }
         else if (e.Control || e.Alt || e.KeyCode == Keys.Escape)
         {
             currentInput = string.Empty;
             return;
         }
+        
+        // Override? I bet this doesn't work internationally!
+        if (!e.Shift)
+        {
+            if (e.KeyCode == Keys.Oem2)
+            {
+                code = '/';
+            }
+            else if (e.KeyCode == Keys.OemPeriod)
+            {
+                code = '.';
+            }
+            else if (e.KeyCode == Keys.Oemcomma)
+            {
+                code = ',';
+            }
+            else if (e.KeyCode == Keys.Oemplus)
+            {
+                code = '=';
+            }
+        }
 
         var pending = pendingUserInputs.Peek().s.ToUpper();
         var pendingFull = pendingUserInputs.Peek().s.ToUpper();
         var pendingTime = pendingUserInputs.Peek().time;
-
-        var code = char.ToUpper((char)e.KeyCode);
 
         currentInput += code;
         if (pending[0] == '|')

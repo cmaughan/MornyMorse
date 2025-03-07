@@ -48,7 +48,7 @@ public class PlayerTask
     }
 
     public double StartTime => _startTime;
-    public double CurrentTime => _stopwatch.Elapsed.TotalSeconds;
+    public double CurrentTime => _stopwatch.Elapsed.TotalMilliseconds / 1000.0;
     public void Start()
     {
 
@@ -85,7 +85,10 @@ public class PlayerTask
                         bool previousCharacterInWord = false;
                         foreach (char ditDash in val)
                         {
-                            if (previousCharacterInWord) AddSpace(1);
+                            if (previousCharacterInWord)
+                            {
+                                AddSpace(1);
+                            }
                             previousCharacterInWord = true;
 
                             var duration = (ditDash == '.') ? ditDuration : ditDuration * 3.0;
@@ -112,14 +115,14 @@ public class PlayerTask
                     finishedTimes.Add(new StringFinishTime
                     {
                         s = s,
-                        time = totalDuration + _stopwatch.Elapsed.TotalSeconds + 0.1
+                        time = totalDuration + CurrentTime
                     });
                 }
 
                 while (!_cts.Token.IsCancellationRequested)
                 {
                     _stopwatch.Start();
-                    _startTime = _stopwatch.Elapsed.TotalSeconds;
+                    _startTime = CurrentTime;
 
                     finishedTimes.Clear();
 

@@ -21,6 +21,15 @@ public class Morse
     "|SX",
     "|VE"];
 
+    public static readonly List<string> Punctuation = [
+        ",",
+        "?",
+        ".",
+        ",",
+        "/",
+        "="
+        ];
+
     public static readonly List<string> Letters = [
     "A",
     "B",
