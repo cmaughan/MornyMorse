@@ -58,8 +58,7 @@ public class Morse
     "Y",
     "Z" ];
 
-    public static readonly List<string> Words = ["THAT", "WITH", "HAVE", "THIS", "FROM", "THEY", "WILL", "WOULD", "THERE", "THEIR", "WHICH", "ABOUT", "THESE", "OTHER", "WORDS", "COULD", "WRITE", "FIRST", "THOSE", "BEING", "AFTER", "SHALL", "BELOW", "THING", "WHERE", "UNDER", "AGAIN", "EVERY", "NEVER", "MIGHT", "FOUND", "RIGHT", "GOING", "GREAT", "PLACE", "SMALL", "LARGE", "PEOPLE", "POINT", "WORLD", "WHILE", "SOUND", "AGAIN", "HOUSE", "GROUP", "TABLE", "STORY", "WHITE", "EARTH", "SENSE", "YOUNG", "THINK", "SHOULD", "LIGHT", "LATER", "PLACE", "LOOKS", "WATER", "THESE", "THINK", "WORDS", "CHILD", "SOUTH", "POWER", "SHORT", "REACH", "WHOLE", "ALONG", "TIMES", "STATE", "BLACK", "LEVEL", "LIVED", "RIVER", "ALONE", "FIELD", "DOING", "START", "WHOM", "BEGAN", "WHOSE", "ENTER", "ROUND", "HEARD", "LEARN", "BELOW", "FINAL", "PARTS", "ALWAYS", "UNDER", "HEART", "READY", "CLEAR", "TRUTH", "VOICE", "BRING", "POINT", "GIVEN"];
-
+    public static readonly List<string> Words = ["ABOUT", "AFTER", "AGAIN", "AGAIN", "ALONE", "ALONG", "ALWAYS", "BEGAN", "BEING", "BELOW", "BELOW", "BLACK", "BRING", "CHILD", "CLEAR", "COULD", "DOING", "EARTH", "ENTER", "EVERY", "FIELD", "FINAL", "FIRST", "FOUND", "FROM", "GIVEN", "GOING", "GREAT", "GROUP", "HAVE", "HEARD", "HEART", "HOUSE", "LARGE", "LATER", "LEARN", "LEVEL", "LIGHT", "LIVED", "LOOKS", "MIGHT", "NEVER", "OTHER", "PARTS", "PEOPLE", "PLACE", "PLACE", "POINT", "POINT", "POWER", "REACH", "READY", "RIGHT", "RIVER", "ROUND", "SENSE", "SHALL", "SHORT", "SHOULD", "SMALL", "SOUND", "SOUTH", "START", "STATE", "STORY", "TABLE", "THAT", "THEIR", "THERE", "THESE", "THESE", "THEY", "THING", "THINK", "THINK", "THIS", "THOSE", "TIMES", "TRUTH", "UNDER", "UNDER", "VOICE", "WATER", "WHERE", "WHICH", "WHILE", "WHITE", "WHOLE", "WHOM", "WHOSE", "WILL", "WITH", "WORDS", "WORDS", "WORLD", "WOULD", "WRITE", "YOUNG"];
 
     public static readonly List<string> Numbers =
     [

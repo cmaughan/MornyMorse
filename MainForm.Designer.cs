@@ -42,6 +42,12 @@
             startButton = new Button();
             testSetChecks = new NoKeyboardCheckedListBox();
             averageValue = new Label();
+            wpmLabel = new Label();
+            label1 = new Label();
+            wpm = new NumericUpDown();
+            letterWpm = new NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)wpm).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)letterWpm).BeginInit();
             SuspendLayout();
             // 
             // replayButton
@@ -80,7 +86,7 @@
             testSetChecks.CheckOnClick = true;
             testSetChecks.FormattingEnabled = true;
             testSetChecks.Items.AddRange(new object[] { "Letters", "Numbers", "ProSigns", "Bigrams", "Trigrams", "Words" });
-            testSetChecks.Location = new Point(1821, 127);
+            testSetChecks.Location = new Point(1823, 232);
             testSetChecks.Name = "testSetChecks";
             testSetChecks.Size = new Size(173, 228);
             testSetChecks.TabIndex = 5;
@@ -89,17 +95,63 @@
             // 
             averageValue.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             averageValue.AutoSize = true;
-            averageValue.Location = new Point(1821, 373);
+            averageValue.Location = new Point(1821, 477);
             averageValue.Name = "averageValue";
             averageValue.Size = new Size(24, 30);
             averageValue.TabIndex = 7;
             averageValue.Text = "0";
+            // 
+            // wpmLabel
+            // 
+            wpmLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            wpmLabel.AutoSize = true;
+            wpmLabel.Location = new Point(1823, 126);
+            wpmLabel.Name = "wpmLabel";
+            wpmLabel.Size = new Size(64, 30);
+            wpmLabel.TabIndex = 10;
+            wpmLabel.Text = "WPM";
+            // 
+            // label1
+            // 
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Location = new Point(1823, 179);
+            label1.Name = "label1";
+            label1.Size = new Size(77, 30);
+            label1.TabIndex = 11;
+            label1.Text = "Spaces";
+            // 
+            // wpm
+            // 
+            wpm.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            wpm.Location = new Point(1907, 123);
+            wpm.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
+            wpm.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            wpm.Name = "wpm";
+            wpm.Size = new Size(87, 35);
+            wpm.TabIndex = 12;
+            wpm.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // letterWpm
+            // 
+            letterWpm.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            letterWpm.Location = new Point(1905, 178);
+            letterWpm.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
+            letterWpm.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            letterWpm.Name = "letterWpm";
+            letterWpm.Size = new Size(91, 35);
+            letterWpm.TabIndex = 13;
+            letterWpm.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2018, 1118);
+            Controls.Add(letterWpm);
+            Controls.Add(wpm);
+            Controls.Add(label1);
+            Controls.Add(wpmLabel);
             Controls.Add(averageValue);
             Controls.Add(testSetChecks);
             Controls.Add(startButton);
@@ -108,6 +160,8 @@
             KeyPreview = true;
             Name = "MainForm";
             Text = "Morny Morse";
+            ((System.ComponentModel.ISupportInitialize)wpm).EndInit();
+            ((System.ComponentModel.ISupportInitialize)letterWpm).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -118,5 +172,9 @@
         private Button startButton;
         private NoKeyboardCheckedListBox testSetChecks;
         private Label averageValue;
+        private Label wpmLabel;
+        private Label label1;
+        private NumericUpDown wpm;
+        private NumericUpDown letterWpm;
     }
 }

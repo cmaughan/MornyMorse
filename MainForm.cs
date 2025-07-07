@@ -61,6 +61,19 @@ public partial class MainForm : Form
         rowControl.Dock = DockStyle.Fill;
         panel1.Controls.Add(rowControl);
 
+        wpm.ValueChanged += (object? sender, EventArgs e) =>
+        {
+            playerTask.wpm = (int)wpm.Value;
+        };
+
+        letterWpm.ValueChanged += (object? sender, EventArgs e) =>
+        {
+            playerTask.letterWpm = (int)letterWpm.Value;
+        };
+
+        wpm.ReadOnly = false;
+        letterWpm.ReadOnly = false;
+
         // Check boxes
         {
             testSetChecks.DataSource = checkboxItems;
@@ -178,6 +191,9 @@ public partial class MainForm : Form
 
         allStringTimes = LoadTimings(filePath) ?? new Dictionary<string, RollingAverage>();
 
+        wpm.Value = Properties.Settings.Default.wpm;
+        letterWpm.Value = Properties.Settings.Default.letterWpm;
+
         /*
         foreach (var t in allStringTimes)
         {
@@ -278,18 +294,21 @@ public partial class MainForm : Form
         {
             if (e.KeyCode == Keys.A)
             {
+                e.SuppressKeyPress = true;
                 AddPlayerString(pendingUserInputs.Peek().s, false);
                 currentInput = string.Empty;
                 return;
             }
             else if (e.KeyCode == Keys.S)
             {
+                e.SuppressKeyPress = true;
                 playerTask.QueuePlayerRequest(PlayerRequestType.Save, pendingUserInputs.Peek().s, false);
                 currentInput = string.Empty;
                 return;
             }
             else if (e.KeyCode == Keys.ShiftKey)
             {
+                e.SuppressKeyPress = true;
                 currentInput = string.Empty;
                 return;
             }
@@ -307,7 +326,7 @@ public partial class MainForm : Form
             currentInput = string.Empty;
             return;
         }
-        
+
         // Override? I bet this doesn't work internationally!
         if (!e.Shift)
         {
@@ -348,8 +367,8 @@ public partial class MainForm : Form
             {
                 if (currentInput != pending.Substring(0, currentInput.Length))
                 {
-                    allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() + 1.0);
-                    allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() + 1.0);
+                    allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() * 1.1);
+                    allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() * 1.1);
                     playerTask.QueuePlayerRequest(PlayerRequestType.Buzz);
                     currentInput = String.Empty;
                 }
@@ -358,7 +377,7 @@ public partial class MainForm : Form
 
             if (currentInput == pending)
             {
-                double t = time - pendingTime - PlayerTask.ditDuration;
+                double t = time - pendingTime - playerTask.DitDuration;
                 allStringTimes[pendingFull].AddValue(t);
 
                 Debug.WriteLine($"Char: {code}, Time: {t:F1}, Av: {allStringTimes[pendingFull].GetAverage():F1}");
@@ -371,8 +390,8 @@ public partial class MainForm : Form
             }
             else
             {
-                allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() + 1.0);
-                allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() + 1.0);
+                allStringTimes[pendingFull].AddValue(allStringTimes[pendingFull].GetAverage() * 1.1);
+                allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() * 1.1);
                 playerTask.QueuePlayerRequest(PlayerRequestType.Buzz);
             }
 
@@ -391,6 +410,8 @@ public partial class MainForm : Form
 
     private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)
     {
+        Properties.Settings.Default.wpm = (int)wpm.Value;
+        Properties.Settings.Default.letterWpm = (int)letterWpm.Value;
         Properties.Settings.Default.IsMaximized = (this.WindowState == FormWindowState.Maximized);
         Properties.Settings.Default.Save();
 
@@ -435,8 +456,9 @@ public partial class MainForm : Form
         double totalOfAllValues = GetCurrentTimes().Values.Sum(ra => ra.Average);
         var dev = GetCurrentTimes().Values.Select(ra => ra.Average).StdDev(x => x);
         var variation = (dev / averageOfAllAverages) * 100.0;
+        var wpm = (60.0 / (averageOfAllAverages * 5.0));
 
-        this.averageValue.Text = $"Total: {totalOfAllValues:F1}\nAvg: {averageOfAllAverages:F1}\nVariation: {variation:F1}%";
+        this.averageValue.Text = $"Total: {totalOfAllValues:F1}\nAvg: {averageOfAllAverages:F1}\nVariation: {variation:F1}%\nWPM: {wpm:F1}\n";
 
     }
     private void Reset(bool clearTimings)

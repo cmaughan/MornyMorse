@@ -30,8 +30,8 @@ public readonly record struct PlayerRequest(PlayerRequestType type, string text,
 
 public class PlayerTask
 {
-    public const float wpm = 30.0f;
-    public const double ditDuration = 1.2f / wpm;
+    public float wpm = 25.0f;
+    public float letterWpm = 5.0f;
     private readonly ConcurrentQueue<PlayerRequest> _playerMessageQueue = new();
     private readonly CancellationTokenSource _cts = new();
     private WaveFileWriter? _waveFileWriter = null;
@@ -49,6 +49,8 @@ public class PlayerTask
 
     public double StartTime => _startTime;
     public double CurrentTime => _stopwatch.Elapsed.TotalMilliseconds / 1000.0;
+    public float DitDuration => 1.2f / wpm;
+
     public void Start()
     {
 
@@ -65,21 +67,22 @@ public class PlayerTask
                 double totalDuration = 0.0;
                 int sampleRate = 44100;
 
-                Debug.WriteLine($"Dit duration: {ditDuration}");
-
-                void AddSpace(int ditLength)
+                void AddSpace(int ditLength, float thisWpm)
                 {
+                    var ditTime = 1.2f / thisWpm;
+                    var seconds = ditLength * ditTime;
                     var wordPause = new SignalGenerator(sampleRate, 1)
                     {
                         Gain = 0.0
-                    }.Take(TimeSpan.FromSeconds(ditDuration * ditLength)) as ISampleProvider;
+                    }.Take(TimeSpan.FromSeconds(seconds)) as ISampleProvider;
 
                     currentProvider = currentProvider?.FollowedBy(wordPause) ?? wordPause;
-                    totalDuration += ditDuration * ditLength;
+                    totalDuration += seconds;
                 }
 
                 void AddLetter(string morseDigraph)
                 {
+                    var ditDuration = 1.2f / wpm;
                     if (Morse.ToMorse.TryGetValue(morseDigraph, out string? val))
                     {
                         bool previousCharacterInWord = false;
@@ -87,7 +90,7 @@ public class PlayerTask
                         {
                             if (previousCharacterInWord)
                             {
-                                AddSpace(1);
+                                AddSpace(1, wpm);
                             }
                             previousCharacterInWord = true;
 
@@ -110,12 +113,12 @@ public class PlayerTask
                 }
 
                 var finishedTimes = new List<StringFinishTime>();
-                void AddFinishTime(string s)
+                void AddFinishTime(string s, double duration)
                 {
                     finishedTimes.Add(new StringFinishTime
                     {
                         s = s,
-                        time = totalDuration + CurrentTime
+                        time = duration + CurrentTime
                     });
                 }
 
@@ -141,6 +144,7 @@ public class PlayerTask
                             _sendTone = new WaveOutEvent { DeviceNumber = 0 };
                             _sendTone.DesiredLatency = 100;
 
+                            var ditDuration = 1.2f / wpm;
                             double attackReleaseTime = ditDuration * 0.0010;
                             _sentToneADSR = new ADSRSineWaveProvider(
                                 frequency: 600,
@@ -187,34 +191,37 @@ public class PlayerTask
 
                         if (string.IsNullOrEmpty(message.text)) continue;
 
-                        bool lastLetter = true;
+                        bool lastLetter = false;
                         foreach (char c in message.text)
                         {
                             if (c == ' ')
                             {
-                                AddSpace(7);
+                                // Space between words
+                                AddSpace(7, letterWpm);
                                 lastLetter = false;
                                 continue;
                             }
 
                             if (Morse.ToMorse.TryGetValue(c.ToString(), out string? val))
                             {
-                                if (lastLetter) AddSpace(3);
+                                // Add space between letters, 3 dits; a dah
+                                if (lastLetter)
+                                {
+                                    AddSpace(3, letterWpm);
+                                }
                                 AddLetter(c.ToString());
                                 lastLetter = true;
                             }
                         }
-                        AddFinishTime(message.text);
-                        AddSpace(7);
+
+                        var duration = totalDuration;
+                        //AddFinishTime(message.text);
+
+                        // Space between words, 7 dits
+                        AddSpace(7, letterWpm);
 
                         if (currentProvider != null)
                         {
-                            MessageSent?.Invoke(new MessageFromPlayer
-                            {
-                                type = PlayerMessageType.PlayStarted,
-                                stringFinishedTimes = message.queueIt ? finishedTimes : null
-                            });
-
                             if (message.type == PlayerRequestType.Save)
                             {
                                 _waveFileWriter?.Dispose();
@@ -229,6 +236,15 @@ public class PlayerTask
                             }
 
                             wo.Play();
+
+                            AddFinishTime(message.text, duration);
+                            
+                            MessageSent?.Invoke(new MessageFromPlayer
+                            {
+                                type = PlayerMessageType.PlayStarted,
+                                stringFinishedTimes = message.queueIt ? finishedTimes : null
+                            });
+
                         }
                     }
                 }
