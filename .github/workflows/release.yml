@@ -27,7 +27,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish self-contained app
-        run: dotnet publish -c Release -r win-x64 --self-contained true -o publish /p:InvariantGlobalization=true
+        run: dotnet publish -c Release -r win-x64 --self-contained true -o publish /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:InvariantGlobalization=true
 
       - name: Zip published output
         run: Compress-Archive -Path publish\* -DestinationPath MornyMorse-win-x64.zip
