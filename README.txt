@@ -1,5 +1,7 @@
 MornyMorse
 
+![MornyMorse](screenshots/1.png)
+
 This is a pretty basic app designed to not get in the way and help you learn Morse.  You just choose what you want to be tested on.
 When you click start, it will pick something and play it, and you have to type what you hear.  
 You can Replay or hit SHIFT-A to hear it again.  If you get a character wrong, you'll get a beep and you have to type the current played thing again.
