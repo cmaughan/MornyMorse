@@ -46,6 +46,8 @@
             label1 = new Label();
             wpm = new NumericUpDown();
             letterWpm = new NumericUpDown();
+            label2 = new Label();
+            currentInputText = new Label();
             ((System.ComponentModel.ISupportInitialize)wpm).BeginInit();
             ((System.ComponentModel.ISupportInitialize)letterWpm).BeginInit();
             SuspendLayout();
@@ -95,7 +97,7 @@
             // 
             averageValue.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             averageValue.AutoSize = true;
-            averageValue.Location = new Point(1821, 477);
+            averageValue.Location = new Point(1821, 571);
             averageValue.Name = "averageValue";
             averageValue.Size = new Size(24, 30);
             averageValue.TabIndex = 7;
@@ -143,11 +145,35 @@
             letterWpm.TabIndex = 13;
             letterWpm.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
+            // label2
+            // 
+            label2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label2.AutoSize = true;
+            label2.Location = new Point(1820, 479);
+            label2.Name = "label2";
+            label2.Size = new Size(67, 30);
+            label2.TabIndex = 14;
+            label2.Text = "Input:";
+            label2.Click += label2_Click;
+            // 
+            // currentInputText
+            // 
+            currentInputText.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            currentInputText.AutoSize = true;
+            currentInputText.BorderStyle = BorderStyle.FixedSingle;
+            currentInputText.Font = new Font("Segoe UI", 11.1428576F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            currentInputText.Location = new Point(1823, 509);
+            currentInputText.Name = "currentInputText";
+            currentInputText.Size = new Size(2, 39);
+            currentInputText.TabIndex = 15;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(2018, 1118);
+            Controls.Add(currentInputText);
+            Controls.Add(label2);
             Controls.Add(letterWpm);
             Controls.Add(wpm);
             Controls.Add(label1);
@@ -158,6 +184,7 @@
             Controls.Add(panel1);
             Controls.Add(replayButton);
             KeyPreview = true;
+            MinimumSize = new Size(20, 20);
             Name = "MainForm";
             Text = "Morny Morse";
             ((System.ComponentModel.ISupportInitialize)wpm).EndInit();
@@ -176,5 +203,7 @@
         private Label label1;
         private NumericUpDown wpm;
         private NumericUpDown letterWpm;
+        private Label label2;
+        private Label currentInputText;
     }
 }

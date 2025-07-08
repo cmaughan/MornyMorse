@@ -193,6 +193,8 @@ public partial class MainForm : Form
 
         wpm.Value = Properties.Settings.Default.wpm;
         letterWpm.Value = Properties.Settings.Default.letterWpm;
+        wpm.ReadOnly = true;
+        letterWpm.ReadOnly = true;
 
         /*
         foreach (var t in allStringTimes)
@@ -283,6 +285,12 @@ public partial class MainForm : Form
     {
         e.Handled = true;
 
+        if (wpm.Focused || letterWpm.Focused)
+        {
+            // Allow the user to play the game after changing wpm
+            e.SuppressKeyPress = true;
+        }
+
         if (pendingUserInputs.Count == 0)
         {
             currentInput = string.Empty;
@@ -290,6 +298,7 @@ public partial class MainForm : Form
         }
 
         var code = char.ToUpper((char)e.KeyCode);
+
         if (e.Shift)
         {
             if (e.KeyCode == Keys.A)
@@ -353,6 +362,8 @@ public partial class MainForm : Form
         var pendingTime = pendingUserInputs.Peek().time;
 
         currentInput += code;
+        this.currentInputText.Text = currentInput;
+
         if (pending[0] == '|')
         {
             pending = pending.Trim('|');
@@ -542,4 +553,8 @@ public partial class MainForm : Form
         return new Dictionary<string, RollingAverage>();
     }
 
+    private void label2_Click(object sender, EventArgs e)
+    {
+
+    }
 }
