@@ -294,6 +294,7 @@ public partial class MainForm : Form
         if (pendingUserInputs.Count == 0)
         {
             currentInput = string.Empty;
+            this.currentInputText.Text = currentInput;
             return;
         }
 
@@ -306,6 +307,7 @@ public partial class MainForm : Form
                 e.SuppressKeyPress = true;
                 AddPlayerString(pendingUserInputs.Peek().s, false);
                 currentInput = string.Empty;
+                this.currentInputText.Text = currentInput;
                 return;
             }
             else if (e.KeyCode == Keys.S)
@@ -313,12 +315,14 @@ public partial class MainForm : Form
                 e.SuppressKeyPress = true;
                 playerTask.QueuePlayerRequest(PlayerRequestType.Save, pendingUserInputs.Peek().s, false);
                 currentInput = string.Empty;
+                this.currentInputText.Text = currentInput;
                 return;
             }
             else if (e.KeyCode == Keys.ShiftKey)
             {
                 e.SuppressKeyPress = true;
                 currentInput = string.Empty;
+                this.currentInputText.Text = currentInput;
                 return;
             }
             else if (e.KeyCode == Keys.Oem2)
@@ -333,6 +337,7 @@ public partial class MainForm : Form
         else if (e.Control || e.Alt || e.KeyCode == Keys.Escape)
         {
             currentInput = string.Empty;
+            this.currentInputText.Text = currentInput;
             return;
         }
 
@@ -382,6 +387,7 @@ public partial class MainForm : Form
                     allStringTimes[pending].AddValue(allStringTimes[pending].GetAverage() * 1.1);
                     playerTask.QueuePlayerRequest(PlayerRequestType.Buzz);
                     currentInput = String.Empty;
+                    this.currentInputText.Text = currentInput;
                 }
                 return;
             }
@@ -407,6 +413,7 @@ public partial class MainForm : Form
             }
 
             currentInput = string.Empty;
+            this.currentInputText.Text = currentInput;
             rowControl.SetValues(stringTimes);
             UpdateTotals();
         }
@@ -415,6 +422,7 @@ public partial class MainForm : Form
             if (pending.Length < currentInput.Length)
             {
                 currentInput = string.Empty;
+                this.currentInputText.Text = currentInput;
             }
         }
     }
