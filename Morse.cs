@@ -3,7 +3,15 @@
 public class Morse
 {
     public static readonly List<string> Bigrams = ["AB", "AC", "AD", "AE", "AF", "AG", "AL", "AM", "AN", "AR", "AS", "AT", "AU", "AV", "AW", "AY", "BA", "BE", "BI", "BL", "BO", "BR", "BU", "CA", "CE", "CH", "CI", "CL", "CO", "CR", "CU", "DA", "DE", "DI", "DO", "DR", "DU", "EA", "ED", "EE", "EF", "EI", "EL", "EM", "EN", "ER", "ES", "ET", "EV", "EW", "EX", "FA", "FE", "FI", "FL", "FO", "FR", "FU", "GA", "GE", "GI", "GL", "GO", "GR", "GU", "HA", "HE", "HI", "HO", "HU", "HY", "IA", "IE", "IG", "IL", "IM", "IN", "IO", "IR", "IS", "IT", "IV", "JA", "JE", "JO", "JU", "KA", "KE", "KI", "KN", "LA", "LE", "LI", "LO", "LU", "MA", "ME", "MI", "MO", "MU", "NA", "NE", "NI", "NO", "NU", "NY", "OA", "OB", "OC", "OD", "OE", "OF", "OG", "OI", "OL", "OM", "ON", "OO", "OP", "OR", "OS", "OT", "OU", "OW", "OX", "PA", "PE", "PI", "PL", "PO", "PR", "PU", "QU", "RA", "RE", "RI", "RO", "RU", "SA", "SC", "SE", "SH", "SI", "SL", "SO", "SP", "ST", "SU", "TA", "TE", "TH", "TI", "TO", "TR", "TU", "TW", "UA", "UE", "UL", "UM", "UN", "UP", "UR", "US", "UT", "VA", "VE", "VI", "VO", "WA", "WE", "WH", "WI", "WO", "WR", "XA", "XE", "XI", "YA", "YE", "YO", "ZA", "ZE"];
-    public static readonly List<string> Trigrams = ["THE", "AND", "THA", "ENT", "ING", "ION", "TIO", "FOR", "NDE", "HAS", "NCE", "EDT", "TIS", "OFT", "STH", "MEN", "ONE"];
+    public static readonly List<string> Trigrams = [
+"THE","AND","ING","HER","HAT","HIS","THA","ERE","FOR","ENT","ION","TER","WAS","YOU","ITH","VER","ALL","WIT","THI","TIO",
+"MEN","EVE","OUT","BUT","ARE","NOT","ONE","HAD","HIN","STH","NCE","OUR","RES","COM","ATI","HAV","TED","ERS","CON","ILL",
+"WHO","WHI","ANY","CAN","PRO","HAR","EAD","MAN","EVE","STA","ECT","ONS","DAY","ONE","OLD","OVE","EVE","UND","ITH","HOU",
+"WAS","THI","SHE","ONS","ERE","AIN","EXP","REA","ESS","AIR","IME","NOW","INT","COU","BLE","UST","HOU","AIN","CHA","THE",
+"IGH","EAR","STR","OWN","WAY","HOU","IST","ESS","LED","TOR","URE","OUT","ACK","REA","GET","ACT","TWO","WON","AME","AIN",
+"TRI","NEE","WEL","OVE","OTH","LOW","ING","LET","INT","ERN"
+
+    ];
     public static readonly List<string> ProSigns = [
     "|AC",
     "|AR",
